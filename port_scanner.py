@@ -5,7 +5,8 @@ try:
     import socket
     from termcolor import colored
     from optparse import OptionParser
-
+    import platform
+    import os
 except ImportError as err:
     print(err)
     module = "".join(str(err).split(' ')[-1:]).strip("\'")
@@ -13,8 +14,24 @@ except ImportError as err:
           (module, module))
 
 
+# def ping(host):
+#     print()
+#     # use a different option for each platform
+#     param = '-n' if platform.system().lower() == 'windows' else '-c'
+#     # the command is ping [-option] [number of pkts] [host]
+#     command = "ping %s 1 %s" % (param, host)
+#     # NOTICE:wehn Destination host unreachable error. Exit code is zero (no error)
+#     if str(os.system(command)) == 1:
+#         print("""The host is not replaying to ping requset make sure you typed a correct ip address;\
+#          otherwise either the host is behind a firewall or is offline.
+#          """)
+#         exit()
+
+
+
 def portscanner():
     # will return a 0 if no erros
+    # ping(host)
     if sock.connect_ex((host, port)):
         print(colored("[-] port %d is closed" % port, "red"))
     else:
@@ -30,7 +47,6 @@ def options():
                       type="int", help="port number to run on [80 default]")
 
     (options, args) = parser.parse_args()
-
     global host
     host = options.host
     global port
