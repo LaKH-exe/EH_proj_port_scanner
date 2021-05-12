@@ -39,7 +39,8 @@ def portscanner():
 
 
 def options():
-    parser = OptionParser("usage: %prog [options]")
+    parser = OptionParser(
+        "\n[!!] usage: %prog [-H -p -h] [ip] [port] \n[!!] use -h to print help")
     parser.add_option("-H", "--host", dest="host",
                       default="127.0.0.1", type="string",
                       help="specify hostname to run on [127.0.0.1 default] ")
