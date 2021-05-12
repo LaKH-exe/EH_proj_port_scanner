@@ -20,7 +20,7 @@ host = input("[*] Enter the host\t")
 port = int(input("[*] Enter the port\t"))
 
 
-def portscanner(port):
+def portscanner():
     # will return a 0 if no erros
     if sock.connect_ex((host, port)):
         print(colored("[-] port %d is closed" % port, "red"))
