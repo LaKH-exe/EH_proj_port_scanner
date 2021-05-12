@@ -28,4 +28,28 @@ def portscanner(port):
         print(colored("[+] port %d is open" % port, "green"))
 
 
-portscanner(port)
+def options():
+    parser = OptionParser("usage: %prog [options]")
+    parser.add_option("-H", "--host", dest="host",
+                      default="127.0.0.1", type="string",
+                      help="specify hostname to run on [127.0.0.1 default] ")
+    parser.add_option("-p", "--port", dest="port", default=80,
+                      type="int", help="port number to run on [80 default]")
+
+    (options, args) = parser.parse_args()
+
+    global host
+    host = options.host
+    global port
+    port = options.port
+
+
+if __name__ == "__main__":
+    # create an instance of OptionParser
+    parser = OptionParser()
+    # creating an obj of the socket
+    # will use ipv4 address and tcp stream
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # call the funcs
+    options()
+    portscanner()
