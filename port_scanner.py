@@ -3,8 +3,8 @@ import socket
 #will use ipv4 address and tcp stream
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #the host and the port we want to scan
-host = input("[*] Enter the host")
-port = input("[*] Enter the port")
+host = input("[*] Enter the host\t")
+port = int(input("[*] Enter the port\t"))
 
 
 def portscanner(port):
