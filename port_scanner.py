@@ -56,7 +56,7 @@ def options():
     global host
     host = options.host
     global ports
-    ports = str(options.port).split(",")
+    ports = str(options.ports).split(",")
     thread_ports(host, ports)
 
 if __name__ == "__main__":
