@@ -40,7 +40,10 @@ def portscanner(host, port):
 
 
 def thread_ports(host, ports):
-    print("[*] Result scan for %s:" % host)
+    hostIp = socket.gethostbyname(host)
+    if hostIp == host:
+        host = ""
+    print("[*] Result scan for %s %s:" % (host, hostIp))
     for each_port in ports:
         thread = threading.Thread(
             target=portscanner, args=(host, int(each_port)))
