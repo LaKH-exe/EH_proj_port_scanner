@@ -32,6 +32,7 @@ except ImportError as err:
 def portscanner(host, port):
     # will return a 0 if no erros
     # ping(host)
+
     if sock.connect_ex((host, port)):
         print(colored("[-] port %d is closed" % port, "red"))
     else:
@@ -39,9 +40,11 @@ def portscanner(host, port):
 
 
 def thread_ports(host, ports):
+    print("[*] Result scan for %s:" % host)
     for each_port in ports:
-        thread = threading.Thread(target=portscanner, args=(host, each_port))
-
+        thread = threading.Thread(
+            target=portscanner, args=(host, int(each_port)))
+        thread.start()
 
 def options():
     parser = OptionParser(
@@ -50,15 +53,18 @@ def options():
                       default="127.0.0.1", type="string",
                       help="specify hostname to run on [127.0.0.1 default] ")
     parser.add_option("-p", "--port", dest="ports", default=80,
-                      type="int", help="one or more(seperated by comma) port number to run on [80 default]")
+                      type="string", help="one or more(seperated by comma) port number to run on [80 default]")
 
     (options, args) = parser.parse_args()
+    parser.usage
     global host
     host = options.host
     global ports
+    if host == "127.0.0.1":
+        print(parser.usage)
     ports = str(options.ports).split(",")
-    thread_ports(host, ports)
 
+    thread_ports(host, ports)
 if __name__ == "__main__":
     # create an instance of OptionParser
     parser = OptionParser()
