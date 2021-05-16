@@ -36,7 +36,8 @@ def portscanner(host, port):
     if sock.connect_ex((host, port)):
         print(colored("[-] port %d is closed" % port, "red"))
     else:
-        print(colored("[+] port %d is open" % port, "green"))
+        banner = sock.recv(1024)
+        print(colored("[+] port %d is open" % port, "green")+"\n"+banner)
 
 
 def thread_ports(host, ports):
