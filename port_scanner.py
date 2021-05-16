@@ -7,6 +7,7 @@ try:
     from optparse import OptionParser
     import platform
     import os
+    import threading
 except ImportError as err:
     print(err)
     module = "".join(str(err).split(' ')[-1:]).strip("\'")
@@ -28,8 +29,7 @@ except ImportError as err:
 #         exit()
 
 
-
-def portscanner():
+def portscanner(host, port):
     # will return a 0 if no erros
     # ping(host)
     if sock.connect_ex((host, port)):
@@ -38,21 +38,26 @@ def portscanner():
         print(colored("[+] port %d is open" % port, "green"))
 
 
+def thread_ports(host, ports):
+    for each_port in ports:
+        thread = threading.Thread(target=portscanner, args=(host, each_port))
+
+
 def options():
     parser = OptionParser(
-        "\n[!!] usage: %prog [-H -p -h] [ip] [port] \n[!!] use -h to print help")
+        "\n[!!] usage: %prog [-H -p -h] [ip] [port,port1] \n[!!] use -h to print help")
     parser.add_option("-H", "--host", dest="host",
                       default="127.0.0.1", type="string",
                       help="specify hostname to run on [127.0.0.1 default] ")
-    parser.add_option("-p", "--port", dest="port", default=80,
-                      type="int", help="port number to run on [80 default]")
+    parser.add_option("-p", "--port", dest="ports", default=80,
+                      type="int", help="one or more(seperated by comma) port number to run on [80 default]")
 
     (options, args) = parser.parse_args()
     global host
     host = options.host
-    global port
-    port = options.port
-
+    global ports
+    ports = str(options.port).split(",")
+    thread_ports(host, ports)
 
 if __name__ == "__main__":
     # create an instance of OptionParser
@@ -62,4 +67,4 @@ if __name__ == "__main__":
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # call the funcs
     options()
-    portscanner()
+    #portscanner()
