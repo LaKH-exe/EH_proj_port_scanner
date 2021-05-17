@@ -57,7 +57,6 @@ def thread_ports(host, ports="", startPort="", endPort=""):
     print("[*] Result scan for %s %s:" % (host, hostIp))
     # used for range option
     if startPort and endPort:
-        print("in start if")
         startPort = int(startPort)
         endPort = int(endPort)
         # inclusive range
@@ -67,9 +66,7 @@ def thread_ports(host, ports="", startPort="", endPort=""):
             thread.start()
     # used for other options
     else:
-        print("in else")
         for each_port in ports:
-            print("checking " + each_port)
             thread = threading.Thread(
                 target=portscanner, args=(host, int(each_port)))
             thread.start()
@@ -109,26 +106,18 @@ def options():
 
 
                       callback=scanCommonPorts,   help="scan the top common ports")
-    print("here")
     (options, args) = parser.parse_args()
     parser.usage
     host = options.host
-    print("list")
-    print(parser.option_list)
     if host == "127.0.0.1":
         print(parser.usage)
 
     if options.ports is not None and not set:
-        print("in ,")
         ports = str(options.ports).split(",")
-        print(ports)
         thread_ports(host, ports)
 
     if options.rangePorts is not None:
-        print("in r")
         stratPort, endPort = options.rangePorts.split("-")
-        print("start port:"+stratPort)
-        print("end port" + endPort)
         thread_ports(host, "", stratPort, endPort)
 
 
