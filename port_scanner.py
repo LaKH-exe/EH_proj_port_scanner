@@ -124,7 +124,7 @@ def options():
         print(ports)
         thread_ports(host, ports)
 
-    elif options.rangePorts is not None:
+    if options.rangePorts is not None:
         print("in r")
         stratPort, endPort = options.rangePorts.split("-")
         print("start port:"+stratPort)
