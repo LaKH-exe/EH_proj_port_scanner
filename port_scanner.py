@@ -74,9 +74,14 @@ def thread_ports(host, ports="", startPort="", endPort=""):
                 target=portscanner, args=(host, int(each_port)))
             thread.start()
 
+
 # scan the top common ports
+set = None
+
 
 def scanCommonPorts(option, opt_str, value, parser):
+    global set
+    set = "set"
     listOfCommonPorts = """1,
     5,7,9,11,13,17,18,19,20,21,22,23,25,37,39,42,43,49,50,53,63,67,68,69,70,71,72,73,73,79,80,88,95,101,102,105,107,109,110,
     111,113,115,117,119,123,137,138,
@@ -101,8 +106,8 @@ def options():
     parser.add_option("-r", "--rangePort", dest="rangePorts",
                       type="string", help="range of ports (seperated by a dash '-')")
     parser.add_option("-c", "--commonPorts", action="callback", dest="isSet", default=True,
-                      
-                      
+
+
                       callback=scanCommonPorts,   help="scan the top common ports")
     print("here")
     (options, args) = parser.parse_args()
@@ -113,8 +118,7 @@ def options():
     if host == "127.0.0.1":
         print(parser.usage)
 
-    print("this is opt dot ports"+str(options.ports))
-    if options.ports is not None and not options.isSet:
+    if options.ports is not None and not set:
         print("in ,")
         ports = str(options.ports).split(",")
         print(ports)
