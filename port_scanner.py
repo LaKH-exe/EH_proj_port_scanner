@@ -1,7 +1,8 @@
 
-#from termcolor import colored
+# Labib Kh
 
 
+# to prompt the user to download unavailable modules
 try:
     import parser
     import socket
@@ -16,6 +17,8 @@ except ImportError as err:
     print("%s IS NOT INSTALLED. USE 'pip install %s' TO INSTALL IT " %
           (module, module))
 
+
+# ping (to check if hosts are up or down) is unrileable for windows machines. The exit codes for ping are not always clear
 
 # def ping(host):
 #     print()
@@ -35,20 +38,24 @@ def portscanner(host, port):
     # will return a 0 if no erros
     # ping(host)
 
+    # connect to this host and port
     if sock.connect_ex((host, port)):
         print(colored("[-] port %d is closed" % port, "red"))
     else:
+        # if connected will print the banner it recived
         banner = sock.recv(1024)
         print(colored("[+] port %d is open" % port, "green")+"\n"+banner)
 
+# use threads to make it faster
+
 
 def thread_ports(host, ports="", startPort="", endPort=""):
+    # translate to ip add if the domain name was provided
     hostIp = socket.gethostbyname(host)
     if hostIp == host:
         host = ""
     print("[*] Result scan for %s %s:" % (host, hostIp))
-    print("stat: "+startPort)
-    print("end: "+endPort)
+    # used for range option
     if startPort and endPort:
         print("in start if")
         startPort = int(startPort)
@@ -58,6 +65,7 @@ def thread_ports(host, ports="", startPort="", endPort=""):
             thread = threading.Thread(
                 target=portscanner, args=(host, int(each_port)))
             thread.start()
+    # used for other options
     else:
         print("in else")
         for each_port in ports:
@@ -66,6 +74,7 @@ def thread_ports(host, ports="", startPort="", endPort=""):
                 target=portscanner, args=(host, int(each_port)))
             thread.start()
 
+# scan the top common ports
 
 def scanCommonPorts(option, opt_str, value, parser):
     listOfCommonPorts = """1,
@@ -125,6 +134,6 @@ if __name__ == "__main__":
     # creating an obj of the socket
     # will use ipv4 address and tcp stream
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # call the funcs
+    # call options
     options()
     # portscanner()
