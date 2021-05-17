@@ -1,7 +1,9 @@
 
 #from termcolor import colored
 
+
 try:
+    import parser
     import socket
     from termcolor import colored
     from optparse import OptionParser
@@ -51,7 +53,7 @@ def thread_ports(host, ports="", startPort="", endPort=""):
         print("in start if")
         startPort = int(startPort)
         endPort = int(endPort)
-        #inclusive range
+        # inclusive range
         for each_port in range(startPort, endPort+1):
             thread = threading.Thread(
                 target=portscanner, args=(host, int(each_port)))
@@ -59,10 +61,24 @@ def thread_ports(host, ports="", startPort="", endPort=""):
     else:
         print("in else")
         for each_port in ports:
-            print("checking "+ each_port)
+            print("checking " + each_port)
             thread = threading.Thread(
                 target=portscanner, args=(host, int(each_port)))
             thread.start()
+
+
+def scanCommonPorts(option, opt_str, value, parser):
+    listOfCommonPorts = """1,
+    5,7,9,11,13,17,18,19,20,21,22,23,25,37,39,42,43,49,50,53,63,67,68,69,70,71,72,73,73,79,80,88,95,101,102,105,107,109,110,
+    111,113,115,117,119,123,137,138,
+    139,143,161,162,163,164,174,177,178,179,191,194,199,201,202,204,206,209,210,213,220,245,347,363,369,370,
+    372,389,427,434,435,443,444,445,464,468,487,488,496,500,535,538,546,547,554,563,565,587,610,611,612,
+    631,636,674,694,749,750,765,767,873,992,993,994,995"""
+    commPorts = str(listOfCommonPorts).split(",")
+
+    host = parser.values.host
+
+    thread_ports(host, commPorts)
 
 
 def options():
@@ -75,28 +91,33 @@ def options():
                       type="string", help="one or more(seperated by comma) port number to run on [80 default]")
     parser.add_option("-r", "--rangePort", dest="rangePorts",
                       type="string", help="range of ports (seperated by a dash '-')")
-
+    parser.add_option("-c", "--commonPorts", action="callback", dest="isSet", default=True,
+                      
+                      
+                      callback=scanCommonPorts,   help="scan the top common ports")
+    print("here")
     (options, args) = parser.parse_args()
     parser.usage
-    global host
     host = options.host
-
+    print("list")
+    print(parser.option_list)
     if host == "127.0.0.1":
         print(parser.usage)
 
-    global ports 
-    if options.ports is not None:
+    print("this is opt dot ports"+str(options.ports))
+    if options.ports is not None and not options.isSet:
         print("in ,")
         ports = str(options.ports).split(",")
         print(ports)
         thread_ports(host, ports)
-        
+
     elif options.rangePorts is not None:
         print("in r")
         stratPort, endPort = options.rangePorts.split("-")
         print("start port:"+stratPort)
-        print("end port"+ endPort)
-        thread_ports(host,"",stratPort, endPort)
+        print("end port" + endPort)
+        thread_ports(host, "", stratPort, endPort)
+
 
 if __name__ == "__main__":
     # create an instance of OptionParser
